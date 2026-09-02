@@ -21,7 +21,6 @@
                 linear-gradient(-45deg, transparent 75%, #422d1b 75%);
             background-size: 16px 16px;
             background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
-            
             font-family: 'Press Start 2P', monospace;
             display: flex;
             justify-content: center;
@@ -43,7 +42,6 @@
             z-index: 1;
         }
 
-        /* no recuero para qe era esto */
         .welcome-screen {
             position: fixed;
             top: 0;
@@ -113,7 +111,6 @@
             display: block;
         }
 
-        /*creo que esto es inservible*/
         .main-content {
             opacity: 0;
             transition: opacity 1s ease-in 0.3s;
@@ -213,21 +210,8 @@
             width: 100%;
             max-width: 380px;
             margin: 0 auto;
-            padding-top: 5px;
+            padding-top: 20px;
             padding-bottom: 80px;
-        }
-
-        
-        .header-title-img {
-            width: 80%;
-            max-width: 280px;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-            image-rendering: pixelated;
-            image-rendering: crisp-edges;
-            will-change: transform;
-            animation: floatTitle 3s ease-in-out infinite alternate;
         }
 
         .header-sub-img {
@@ -235,11 +219,29 @@
             max-width: 160px;
             height: auto;
             display: block;
-            margin: 0 auto;
+            margin: 0 auto 10px auto;
             image-rendering: pixelated;
             image-rendering: crisp-edges;
             will-change: transform;
+            animation: floatTitle 3s ease-in-out infinite alternate;
+        }
+
+        .header-title {
+            color: #FF5555;
+            font-size: 18px;
+            text-align: center;
+            text-shadow: 3px 3px 0px #000;
+            animation: floatTitle 3s ease-in-out infinite alternate;
+            margin-bottom: 2px;
+        }
+
+        .header-subtitle {
+            color: #FFFF55;
+            font-size: 12px;
+            text-align: center;
+            text-shadow: 2px 2px 0px #000;
             animation: floatTitle 3s ease-in-out 0.5s infinite alternate;
+            margin-bottom: 10px;
         }
 
         @keyframes floatTitle {
@@ -247,7 +249,6 @@
             100% { transform: translateY(-6px); }
         }
 
-        
         .music-btn {
             position: fixed;
             top: 10px;
@@ -263,7 +264,6 @@
             box-shadow: inset -2px -2px 0 #111, inset 2px 2px 0 #888;
         }
 
-        
         .secret-message {
             display: none;
             opacity: 0;
@@ -285,7 +285,6 @@
             opacity: 1;
         }
 
-        
         .achievement-card {
             background-color: #212121;
             border: 3px solid #555555;
@@ -309,7 +308,6 @@
             100% { transform: scale(1.02); }
         }
 
-        
         .splash-text {
             position: absolute;
             top: -10px;
@@ -358,7 +356,6 @@
             text-shadow: 1px 1px 0px #2A2A2A;
         }
 
-        
         .hud-wrapper {
             display: flex;
             flex-direction: column;
@@ -407,7 +404,6 @@
             transition: width 0.8s ease-out;
         }
 
-        
         .xp-particle {
             position: fixed;
             pointer-events: none;
@@ -430,7 +426,6 @@
             }
         }
 
-        
         .mc-button {
             background-color: #707070;
             border: 3px solid #000000;
@@ -462,7 +457,6 @@
     <div class="overlay"></div>
     <div class="level-up-flash" id="flash"></div>
 
-    
     <div class="welcome-screen" id="welcomeScreen">
         <div class="welcome-card">
             <p class="welcome-title">Esto se desbloquea con tu nombre:</p>
@@ -472,14 +466,15 @@
         <button class="mc-button" id="btnStart" style="width: auto; padding: 12px 20px;">Desbloquear</button>
     </div>
 
-    
     <div class="main-content" id="mainContent">
         <button class="music-btn" id="btnMusic">🎵 BGM: OFF</button>
         <audio id="bgMusic" src="https://github.com/ckeryy/te-amo/raw/refs/heads/main/TikVid.io_7611706347444309262.mp3" loop preload="none"></audio>
 
         <div class="container">
-            <img src="https://raw.githubusercontent.com/ckeryy/hyc/refs/heads/main/1011a174-cd6e-4881-8897-be4c8ff5bd63.png" alt="Te Amo Hanni" class="header-title-img">
             <img src="https://raw.githubusercontent.com/ckeryy/ck/refs/heads/main/a4a7b6d2-4eee-4b2a-bcf0-a6b0556d1b4c.png" alt="Detalle Hanni" class="header-sub-img">
+
+            <h1 class="header-title">TE AMO HANNI</h1>
+            <h2 class="header-subtitle">❤️ 1 MES ❤️</h2>
 
             <div class="secret-message" id="secretMessage">
                 ✉️ Carta de Inventario:<br><br>
@@ -562,7 +557,6 @@
             const xpColors = ['#55FF55', '#70FF00', '#FFFF55'];
             const splashes = ['¡Player 2 Conectado!', '¡Nuevo Récord!', '¡Nivel Superado!', '¡100% de Amor!'];
 
-            
             function checkName() {
                 const enteredName = nameInput.value.trim().toLowerCase();
                 if (enteredName === 'hanni') {
@@ -667,7 +661,7 @@
                     const dy = Math.sin(angle) * distance;
 
                     particle.style.left = `${rect.left + rect.width / 2}px`;
-                    particle.style.top = `${rect.top + window.scrollY + rect.height / 2}px`;
+                    particle.style.top = `${rect.top + rect.height / 2}px`;
                     particle.style.width = '6px';
                     particle.style.height = '6px';
                     particle.style.backgroundColor = xpColors[Math.floor(Math.random() * xpColors.length)];
