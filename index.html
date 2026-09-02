@@ -43,7 +43,7 @@
             z-index: 1;
         }
 
-        /* --- PANTALLA INICIAL DE SORPRESA --- */
+        /* no recuero para qe era esto */
         .welcome-screen {
             position: fixed;
             top: 0;
@@ -113,7 +113,7 @@
             display: block;
         }
 
-        /* --- CONTENIDO PRINCIPAL (OCULTO AL INICIO) --- */
+        /*creo que esto es inservible*/
         .main-content {
             opacity: 0;
             transition: opacity 1s ease-in 0.3s;
@@ -217,7 +217,7 @@
             padding-bottom: 80px;
         }
 
-        /* --- IMÁGENES DE TÍTULO --- */
+        
         .header-title-img {
             width: 80%;
             max-width: 280px;
@@ -247,7 +247,7 @@
             100% { transform: translateY(-6px); }
         }
 
-        /* --- BOTÓN DE MÚSICA --- */
+        
         .music-btn {
             position: fixed;
             top: 10px;
@@ -263,7 +263,7 @@
             box-shadow: inset -2px -2px 0 #111, inset 2px 2px 0 #888;
         }
 
-        /* --- MENSAJE SECRETO (CARTA) --- */
+        
         .secret-message {
             display: none;
             opacity: 0;
@@ -285,7 +285,7 @@
             opacity: 1;
         }
 
-        /* --- TARJETA DE LOGRO --- */
+        
         .achievement-card {
             background-color: #212121;
             border: 3px solid #555555;
@@ -309,7 +309,7 @@
             100% { transform: scale(1.02); }
         }
 
-        /* SPLASH TEXT */
+        
         .splash-text {
             position: absolute;
             top: -10px;
@@ -358,7 +358,7 @@
             text-shadow: 1px 1px 0px #2A2A2A;
         }
 
-        /* --- CONTADOR Y BARRA DE XP --- */
+        
         .hud-wrapper {
             display: flex;
             flex-direction: column;
@@ -407,7 +407,7 @@
             transition: width 0.8s ease-out;
         }
 
-        /* --- PARTÍCULAS --- */
+        
         .xp-particle {
             position: fixed;
             pointer-events: none;
@@ -430,7 +430,7 @@
             }
         }
 
-        /* BOTÓN */
+        
         .mc-button {
             background-color: #707070;
             border: 3px solid #000000;
@@ -462,7 +462,7 @@
     <div class="overlay"></div>
     <div class="level-up-flash" id="flash"></div>
 
-    <!-- PANTALLA INICIAL MODO BIENVENIDA -->
+    
     <div class="welcome-screen" id="welcomeScreen">
         <div class="welcome-card">
             <p class="welcome-title">Esto se desbloquea con tu nombre:</p>
@@ -472,7 +472,7 @@
         <button class="mc-button" id="btnStart" style="width: auto; padding: 12px 20px;">Desbloquear</button>
     </div>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    
     <div class="main-content" id="mainContent">
         <button class="music-btn" id="btnMusic">🎵 BGM: OFF</button>
         <audio id="bgMusic" src="https://github.com/ckeryy/te-amo/raw/refs/heads/main/TikVid.io_7611706347444309262.mp3" loop preload="none"></audio>
@@ -562,7 +562,7 @@
             const xpColors = ['#55FF55', '#70FF00', '#FFFF55'];
             const splashes = ['¡Player 2 Conectado!', '¡Nuevo Récord!', '¡Nivel Superado!', '¡100% de Amor!'];
 
-            // VALIDACIÓN DEL NOMBRE
+            
             function checkName() {
                 const enteredName = nameInput.value.trim().toLowerCase();
                 if (enteredName === 'hanni') {
