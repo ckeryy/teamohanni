@@ -1,710 +1,529 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logro de Minecraft - Primer Mes</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terminal Matrix Pro</title>
+  
+  <!-- Importación de fuente estilo Minecraft -->
+  <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
 
-        body {
-            background-color: #573d26;
-            background-image: 
-                linear-gradient(45deg, #422d1b 25%, transparent 25%), 
-                linear-gradient(-45deg, #422d1b 25%, transparent 25%), 
-                linear-gradient(45deg, transparent 75%, #422d1b 75%), 
-                linear-gradient(-45deg, transparent 75%, #422d1b 75%);
-            background-size: 16px 16px;
-            background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
-            font-family: 'Press Start 2P', monospace;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-            padding: 10px;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%);
-            z-index: 1;
-        }
+    body {
+      background-color: #000;
+      color: #00ff66;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+    }
 
-        .welcome-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(33, 33, 33, 0.95);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            z-index: 100;
-            opacity: 1;
-            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
-            padding: 20px;
-            text-align: center;
-        }
+    #matrixCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
 
-        .welcome-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
+    /* Overlay para mensajes flotantes de Say con fuente estilo Minecraft */
+    #sayOverlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      color: #ffffff;
+      font-family: 'Minecraftia', 'Courier New', monospace;
+      font-size: 20px;
+      text-align: center;
+      text-shadow: 2px 2px 0px #000000, 0 0 10px #00ff66;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      white-space: nowrap;
+      image-rendering: pixelated;
+    }
 
-        .welcome-card {
-            background-color: #212121;
-            border: 3px solid #555555;
-            box-shadow: inset -3px -3px 0px #111111, inset 3px 3px 0px #888888;
-            padding: 20px;
-            border-radius: 4px;
-            max-width: 340px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+    #sayOverlay.show {
+      opacity: 1;
+    }
 
-        .welcome-title {
-            color: #FFFF55;
-            font-size: 10px;
-            line-height: 1.6;
-            text-shadow: 2px 2px 0px #3F3F00;
-        }
+    /* Modal de Bienvenida */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+    }
 
-        .name-input {
-            background-color: #000000;
-            border: 2px solid #555555;
-            color: #55FF55;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 10px;
-            padding: 10px;
-            text-align: center;
-            width: 100%;
-            outline: none;
-            box-shadow: inset 2px 2px 0px #111111;
-        }
+    .modal-box {
+      background-color: rgba(10, 10, 10, 0.95);
+      border: 2px solid #00ff66;
+      border-radius: 8px;
+      padding: 25px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 30px rgba(0, 255, 102, 0.5);
+      text-align: center;
+    }
 
-        .error-message {
-            color: #FF5555;
-            font-size: 8px;
-            display: none;
-            text-shadow: 1px 1px 0px #3F0000;
-        }
+    .modal-box h2 {
+      margin-bottom: 15px;
+      font-size: 18px;
+      color: #00ff66;
+    }
 
-        .error-message.visible {
-            display: block;
-        }
+    .modal-box input {
+      width: 100%;
+      padding: 10px;
+      background: #000;
+      border: 1px solid #00ff66;
+      color: #00ff66;
+      font-family: inherit;
+      font-size: 16px;
+      border-radius: 4px;
+      outline: none;
+      margin-bottom: 15px;
+      text-align: center;
+    }
 
-        .main-content {
-            opacity: 0;
-            transition: opacity 1s ease-in 0.3s;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    .modal-box button {
+      background-color: #00ff66;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-family: inherit;
+      font-weight: bold;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
 
-        .main-content.visible {
-            opacity: 1;
-        }
+    .modal-box button:hover {
+      background-color: #ffffff;
+      box-shadow: 0 0 10px #ffffff;
+    }
 
-        .level-up-flash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(85, 255, 85, 0.25);
-            pointer-events: none;
-            z-index: 99;
-            opacity: 0;
-        }
+    /* Terminal Container */
+    .terminal-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 700px;
+      background-color: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ff66;
+      border-radius: 8px;
+      box-shadow: 0 0 25px rgba(0, 255, 102, 0.4);
+      overflow: hidden;
+      backdrop-filter: blur(4px);
+    }
 
-        .level-up-flash.active {
-            animation: flashAnim 0.4s ease-out;
-        }
+    .terminal-container::before {
+      content: " ";
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+      background-size: 100% 4px;
+      z-index: 3;
+      pointer-events: none;
+    }
 
-        @keyframes flashAnim {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-        }
+    .terminal-header {
+      background-color: rgba(26, 26, 26, 0.9);
+      padding: 8px 15px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #333;
+    }
 
-        .falling-pixel-heart {
-            position: fixed;
-            top: -30px;
-            width: 20px;
-            height: 20px;
-            pointer-events: none;
-            z-index: 1;
-            will-change: transform, opacity;
-            animation: fallHeart linear forwards;
-        }
+    .buttons {
+      display: flex;
+      gap: 8px;
+    }
 
-        .falling-pixel-heart svg {
-            width: 100%;
-            height: 100%;
-            image-rendering: pixelated;
-            image-rendering: crisp-edges;
-        }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
 
-        @keyframes fallHeart {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            80% { opacity: 0.8; }
-            100% {
-                transform: translateY(105vh) rotate(180deg);
-                opacity: 0;
-            }
-        }
+    .red { background-color: #ff5f56; }
+    .yellow { background-color: #ffbd2e; }
+    .green { background-color: #27c93f; }
 
-        .bg-block {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: rgba(66, 45, 27, 0.4);
-            border: 2px solid rgba(87, 61, 38, 0.6);
-            pointer-events: none;
-            z-index: 0;
-            will-change: transform, opacity;
-            animation: floatBlock linear infinite;
-        }
+    .title {
+      color: #888;
+      font-size: 13px;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
-        @keyframes floatBlock {
-            0% {
-                transform: translateY(100vh);
-                opacity: 0;
-            }
-            10% { opacity: 0.4; }
-            90% { opacity: 0.4; }
-            100% {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-        }
+    .terminal-body {
+      padding: 20px;
+      height: 400px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            z-index: 2;
-            position: relative;
-            width: 100%;
-            max-width: 380px;
-            margin: 0 auto;
-            padding-top: 20px;
-            padding-bottom: 80px;
-        }
+    .line {
+      margin-bottom: 10px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
 
-        .header-sub-img {
-            width: 55%;
-            max-width: 160px;
-            height: auto;
-            display: block;
-            margin: 0 auto 10px auto;
-            image-rendering: pixelated;
-            image-rendering: crisp-edges;
-            will-change: transform;
-            animation: floatTitle 3s ease-in-out infinite alternate;
-        }
+    .prompt-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        .header-title {
-            color: #FF5555;
-            font-size: 18px;
-            text-align: center;
-            text-shadow: 3px 3px 0px #000;
-            animation: floatTitle 3s ease-in-out infinite alternate;
-            margin-bottom: 2px;
-        }
+    .prompt-label {
+      color: #00ff66;
+      font-weight: bold;
+      white-space: nowrap;
+    }
 
-        .header-subtitle {
-            color: #FFFF55;
-            font-size: 12px;
-            text-align: center;
-            text-shadow: 2px 2px 0px #000;
-            animation: floatTitle 3s ease-in-out 0.5s infinite alternate;
-            margin-bottom: 10px;
-        }
+    input[type="text"] {
+      background: transparent;
+      border: none;
+      color: #00ff66;
+      font-family: inherit;
+      font-size: 16px;
+      outline: none;
+      width: 100%;
+    }
 
-        @keyframes floatTitle {
-            0% { transform: translateY(0px); }
-            100% { transform: translateY(-6px); }
-        }
+    .system-msg {
+      color: #888888;
+    }
 
-        .music-btn {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 10;
-            background: #212121;
-            border: 2px solid #555;
-            color: #FFF;
-            padding: 6px 8px;
-            cursor: pointer;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 9px;
-            box-shadow: inset -2px -2px 0 #111, inset 2px 2px 0 #888;
-        }
+    .highlight {
+      color: #ffffff;
+      font-weight: bold;
+    }
 
-        .secret-message {
-            display: none;
-            opacity: 0;
-            background: #c6b284;
-            color: #2c1a0a;
-            padding: 12px;
-            font-size: 9px;
-            line-height: 1.5;
-            text-align: center;
-            border-radius: 4px;
-            border: 3px solid #3c2a1a;
-            box-shadow: inset -2px -2px 0 #8c764b, inset 2px 2px 0 #e6d4aa;
-            width: 100%;
-            transition: opacity 0.4s ease-in;
-        }
+    @keyframes alertFlash {
+      0% { background-color: rgba(255, 0, 0, 0.8); }
+      50% { background-color: rgba(0, 0, 0, 0.9); }
+      100% { background-color: rgba(255, 0, 0, 0.8); }
+    }
 
-        .secret-message.visible {
-            display: block;
-            opacity: 1;
-        }
-
-        .achievement-card {
-            background-color: #212121;
-            border: 3px solid #555555;
-            box-shadow: inset -3px -3px 0px #111111, inset 3px 3px 0px #888888;
-            padding: 10px 12px;
-            display: flex;
-            align-items: center;
-            border-radius: 4px;
-            position: relative;
-            cursor: pointer;
-            width: 100%;
-            will-change: transform;
-        }
-
-        .achievement-card.unlocked {
-            animation: unlockedGlow 1.8s infinite alternate ease-in-out;
-        }
-
-        @keyframes unlockedGlow {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.02); }
-        }
-
-        .splash-text {
-            position: absolute;
-            top: -10px;
-            right: 5px;
-            color: #FFFF55;
-            font-size: 8px;
-            text-shadow: 1px 1px 0px #3F3F00;
-            transform: rotate(-8deg);
-            pointer-events: none;
-            white-space: nowrap;
-        }
-
-        .pixel-heart {
-            width: 32px;
-            height: 32px;
-            margin-right: 10px;
-            image-rendering: pixelated;
-            image-rendering: crisp-edges;
-            flex-shrink: 0;
-            will-change: transform;
-        }
-
-        .achievement-card.unlocked .pixel-heart {
-            animation: heartBeat 1.2s infinite ease-in-out;
-        }
-
-        @keyframes heartBeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.12); }
-        }
-
-        .achievement-text {
-            color: #FFFFFF;
-            font-size: 9px;
-            line-height: 1.4;
-        }
-
-        .achievement-title {
-            color: #FFFF55;
-            text-shadow: 1px 1px 0px #3F3F00;
-            margin-bottom: 3px;
-        }
-
-        .achievement-desc {
-            color: #FFFFFF;
-            text-shadow: 1px 1px 0px #2A2A2A;
-        }
-
-        .hud-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            width: 100%;
-        }
-
-        .counter-box {
-            background-color: #313131;
-            border: 2px solid #000000;
-            box-shadow: inset 2px 2px 0px #555555, inset -2px -2px 0px #151515;
-            padding: 5px 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-radius: 2px;
-            width: 100%;
-            justify-content: center;
-        }
-
-        .counter-icon {
-            color: #55FF55;
-            font-size: 10px;
-        }
-
-        .counter-badge {
-            font-size: 8px;
-            color: #55FF55;
-        }
-
-        .xp-bar-container {
-            width: 100%;
-            height: 10px;
-            background-color: #000;
-            border: 2px solid #3c3c3c;
-            position: relative;
-            overflow: hidden;
-            border-radius: 2px;
-        }
-
-        .xp-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: #55FF55;
-            transition: width 0.8s ease-out;
-        }
-
-        .xp-particle {
-            position: fixed;
-            pointer-events: none;
-            border-radius: 2px;
-            image-rendering: pixelated;
-            image-rendering: crisp-edges;
-            z-index: 10;
-            will-change: transform, opacity;
-            animation: moveParticle 0.8s linear forwards;
-        }
-
-        @keyframes moveParticle {
-            0% {
-                opacity: 1;
-                transform: translate(0, 0);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(var(--dx), var(--dy));
-            }
-        }
-
-        .mc-button {
-            background-color: #707070;
-            border: 3px solid #000000;
-            box-shadow: inset 3px 3px 0px #a8a8a8, inset -3px -3px 0px #383838;
-            color: #E0E0E0;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 10px;
-            padding: 10px 16px;
-            cursor: pointer;
-            text-shadow: 1px 1px 0px #000000;
-            user-select: none;
-            width: 100%;
-        }
-
-        .mc-button:active:not(:disabled) {
-            transform: translateY(2px);
-        }
-
-        .mc-button:disabled {
-            background-color: #4a4a4a;
-            color: #888888;
-            cursor: default;
-            box-shadow: inset 3px 3px 0px #333333, inset -3px -3px 0px #222222;
-        }
-    </style>
+    .glitch-mode {
+      animation: alertFlash 0.2s infinite;
+      border-color: #ff0000;
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+    }
+  </style>
 </head>
 <body>
 
-    <div class="overlay"></div>
-    <div class="level-up-flash" id="flash"></div>
+  <!-- Texto flotante en pantalla -->
+  <div id="sayOverlay"></div>
 
-    <div class="welcome-screen" id="welcomeScreen">
-        <div class="welcome-card">
-            <p class="welcome-title">Esto se desbloquea con tu nombre:</p>
-            <input type="text" id="nameInput" class="name-input" placeholder="Escribe tu nombre..." autocomplete="off">
-            <p class="error-message" id="errorMessage">Nombre incorrecto</p>
-        </div>
-        <button class="mc-button" id="btnStart" style="width: auto; padding: 12px 20px;">Desbloquear</button>
+  <!-- Modal para pedir el nombre -->
+  <div class="modal-overlay" id="modalName">
+    <div class="modal-box">
+      <h2>IDENTIFICACIÓN REQUERIDA</h2>
+      <p style="margin-bottom: 15px; font-size: 14px; color: #888;">Ingresa tu alias para ingresar a la Matrix:</p>
+      <input type="text" id="inputNombreModal" placeholder="Tu alias aquí..." autofocus autocomplete="off">
+      <button id="btnEntrar">INGRESAR</button>
+    </div>
+  </div>
+
+  <canvas id="matrixCanvas"></canvas>
+
+  <div class="terminal-container" id="terminalContainer">
+    <div class="terminal-header">
+      <div class="buttons">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="title">matrix_terminal.sh</div>
     </div>
 
-    <div class="main-content" id="mainContent">
-        <button class="music-btn" id="btnMusic">🎵 BGM: OFF</button>
-        <audio id="bgMusic" src="https://github.com/ckeryy/te-amo/raw/refs/heads/main/TikVid.io_7611706347444309262.mp3" loop preload="none"></audio>
+    <div class="terminal-body" id="terminalBody">
+      <div class="line system-msg">Conexión establecida con la Matrix... [OK]</div>
+      <div class="line">Bienvenido. Escribe <span class="highlight">help</span> para ver los comandos. Usa <span class="highlight">Tab</span> para autocompletar.</div>
+      
+      <div id="historial"></div>
 
-        <div class="container">
-            <img src="https://raw.githubusercontent.com/ckeryy/ck/refs/heads/main/a4a7b6d2-4eee-4b2a-bcf0-a6b0556d1b4c.png" alt="Detalle Hanni" class="header-sub-img">
-
-            <h1 class="header-title">TE AMO HANNI</h1>
-            <h2 class="header-subtitle">❤️ 1 MES ❤️</h2>
-
-            <div class="secret-message" id="secretMessage">
-                ✉️ Carta de Inventario:<br><br>
-                <span id="typedText"></span>
-            </div>
-
-            <div class="achievement-card" id="achievementCard">
-                <div class="splash-text" id="splashText">¡Player 2 Conectado!</div>
-                
-                <svg class="pixel-heart" viewBox="0 0 9 9" fill="none">
-                    <path d="M2 1H4V2H2V1Z" fill="#000000"/>
-                    <path d="M5 1H7V2H5V1Z" fill="#000000"/>
-                    <path d="M1 2H2V4H1V2Z" fill="#000000"/>
-                    <path d="M4 2H5V3H4V2Z" fill="#000000"/>
-                    <path d="M7 2H8V4H7V2Z" fill="#000000"/>
-                    <path d="M0 3H1V5H0V3Z" fill="#000000"/>
-                    <path d="M8 3H9V5H8V3Z" fill="#000000"/>
-                    <path d="M1 5H2V6H1V5Z" fill="#000000"/>
-                    <path d="M7 5H8V6H7V5Z" fill="#000000"/>
-                    <path d="M2 6H3V7H2V6Z" fill="#000000"/>
-                    <path d="M6 6H7V7H6V6Z" fill="#000000"/>
-                    <path d="M3 7H4V8H3V7Z" fill="#000000"/>
-                    <path d="M5 7H6V8H5V7Z" fill="#000000"/>
-                    <path d="M4 8H5V9H4V8Z" fill="#000000"/>
-
-                    <path d="M2 2H4V3H2V2Z" fill="#FF0000"/>
-                    <path d="M5 2H7V3H5V2Z" fill="#FF0000"/>
-                    <path d="M1 3H8V5H1V3Z" fill="#FF0000"/>
-                    <path d="M2 5H7V6H2V5Z" fill="#FF0000"/>
-                    <path d="M3 6H6V7H3V6Z" fill="#FF0000"/>
-                    <path d="M4 7H5V8H4V7Z" fill="#FF0000"/>
-
-                    <path d="M2 2H3V3H2V2Z" fill="#FFFFFF"/>
-                    <path d="M1 3H2V4H1V3Z" fill="#FFFFFF"/>
-                </svg>
-
-                <div class="achievement-text">
-                    <p class="achievement-title">¡Logro obtenido!</p>
-                    <p class="achievement-desc">Primer mes juntos completado</p>
-                </div>
-            </div>
-
-            <div class="hud-wrapper">
-                <div class="counter-box">
-                    <span class="counter-icon">30</span>
-                    <span class="counter-badge" id="counterText">DÍAS JUNTOS | XP 0%</span>
-                </div>
-                <div class="xp-bar-container">
-                    <div class="xp-bar-fill" id="xpBarFill"></div>
-                </div>
-            </div>
-
-            <button class="mc-button" id="btnAchievement">¡Desbloquear!</button>
-        </div>
+      <div class="prompt-line">
+        <span class="prompt-label" id="promptLabel">usuario&gt;</span>
+        <input type="text" id="inputComando" autocomplete="off">
+      </div>
     </div>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            let audioCtx = null;
-            let isUnlocked = false;
+  <script>
+    // --- MANEJO DEL NOMBRE DE USUARIO ---
+    let nombreUsuario = 'usuario';
+    const modalName = document.getElementById('modalName');
+    const inputNombreModal = document.getElementById('inputNombreModal');
+    const btnEntrar = document.getElementById('btnEntrar');
+    const promptLabel = document.getElementById('promptLabel');
+    const input = document.getElementById('inputComando');
 
-            const welcomeScreen = document.getElementById('welcomeScreen');
-            const btnStart = document.getElementById('btnStart');
-            const nameInput = document.getElementById('nameInput');
-            const errorMessage = document.getElementById('errorMessage');
-            const mainContent = document.getElementById('mainContent');
+    function fijarNombre() {
+      const nombreIngresado = inputNombreModal.value.trim();
+      if (nombreIngresado !== '') {
+        nombreUsuario = nombreIngresado;
+      }
+      promptLabel.textContent = `${nombreUsuario}>`;
+      modalName.style.display = 'none';
+      input.focus();
+    }
 
-            const card = document.getElementById('achievementCard');
-            const btn = document.getElementById('btnAchievement');
-            const secretMsg = document.getElementById('secretMessage');
-            const btnMusic = document.getElementById('btnMusic');
-            const bgMusic = document.getElementById('bgMusic');
-            const xpBarFill = document.getElementById('xpBarFill');
-            const counterText = document.getElementById('counterText');
-            const splashText = document.getElementById('splashText');
-            const flash = document.getElementById('flash');
-            const typedText = document.getElementById('typedText');
+    btnEntrar.addEventListener('click', fijarNombre);
+    inputNombreModal.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') fijarNombre();
+    });
 
-            const fullText = "¡Gracias por este primer mes juntos! Eres mi player 2 favorito :3";
-            const xpColors = ['#55FF55', '#70FF00', '#FFFF55'];
-            const splashes = ['¡Player 2 Conectado!', '¡Nuevo Récord!', '¡Nivel Superado!', '¡100% de Amor!'];
+    // --- ANIMACIÓN MATRIX ---
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
 
-            function checkName() {
-                const enteredName = nameInput.value.trim().toLowerCase();
-                if (enteredName === 'hanni') {
-                    errorMessage.classList.remove('visible');
-                    welcomeScreen.classList.add('hidden');
-                    mainContent.classList.add('visible');
-                } else {
-                    errorMessage.classList.add('visible');
-                    nameInput.value = '';
-                }
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%';
+    const fontSize = 16;
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = Array(columns).fill(1);
+    let matrixColor = '#00ff66';
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = matrixColor;
+      ctx.font = `${fontSize}px monospace`;
+
+      const currentColumns = Math.floor(canvas.width / fontSize);
+      if (currentColumns !== columns) {
+        columns = currentColumns;
+        drops = Array(columns).fill(1);
+      }
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = characters.charAt(Math.floor(Math.random() * characters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 33);
+
+    // --- LÓGICA DE LA TERMINAL ---
+    const historial = document.getElementById('historial');
+    const terminalBody = document.getElementById('terminalBody');
+    const terminalContainer = document.getElementById('terminalContainer');
+    const sayOverlay = document.getElementById('sayOverlay');
+    let sayTimeout;
+
+    const listaComandos = ['help', 'perfil', 'recuerdos', 'secreto', 'date', 'matrix', 'sudo', 'say', 'destroy', 'clear'];
+    let historialComandos = [];
+    let indiceHistorial = -1;
+
+    document.querySelector('.terminal-container').addEventListener('click', () => {
+      input.focus();
+    });
+
+    input.addEventListener('keydown', function(event) {
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        const textoActual = input.value.trim().toLowerCase();
+        if (!textoActual) return;
+        const coincidencia = listaComandos.find(c => c.startsWith(textoActual));
+        if (coincidencia) {
+          input.value = coincidencia;
+        }
+      }
+
+      if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (historialComandos.length > 0 && indiceHistorial < historialComandos.length - 1) {
+          indiceHistorial++;
+          input.value = historialComandos[historialComandos.length - 1 - indiceHistorial];
+        }
+      } else if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        if (indiceHistorial > 0) {
+          indiceHistorial--;
+          input.value = historialComandos[historialComandos.length - 1 - indiceHistorial];
+        } else if (indiceHistorial === 0) {
+          indiceHistorial = -1;
+          input.value = '';
+        }
+      }
+
+      if (event.key === 'Enter') {
+        const valorOriginal = input.value;
+        const inputTrimmed = valorOriginal.trim();
+        if (inputTrimmed === '') return;
+
+        historialComandos.push(valorOriginal);
+        indiceHistorial = -1;
+
+        const partes = inputTrimmed.split(' ');
+        const comando = partes[0].toLowerCase();
+        const argumento = partes.slice(1).join(' ');
+
+        const lineaComando = document.createElement('div');
+        lineaComando.className = 'line';
+        lineaComando.innerHTML = `<span class="prompt-label">${escapeHTML(nombreUsuario)}&gt;</span> ${escapeHTML(valorOriginal)}`;
+        historial.appendChild(lineaComando);
+
+        const lineaRespuesta = document.createElement('div');
+        lineaRespuesta.className = 'line';
+
+        switch (comando) {
+          case 'help':
+            lineaRespuesta.innerHTML = `
+              Comandos disponibles:<br>
+              - <span class="highlight">perfil</span>: Estadísticas del usuario.<br>
+              - <span class="highlight">recuerdos</span>: Registro de momentos clave.<br>
+              - <span class="highlight">secreto</span>: Revela el mensaje oculto.<br>
+              - <span class="highlight">date</span>: Muestra la fecha y hora del sistema.<br>
+              - <span class="highlight">matrix [rojo|azul|verde]</span>: Cambia el color de la Matrix.<br>
+              - <span class="highlight">say [texto]</span>: Muestra un mensaje flotante en pantalla.<br>
+              - <span class="highlight">sudo</span>: Solicita acceso de administrador.<br>
+              - <span class="highlight">destroy</span>: Simula un colapso del sistema.<br>
+              - <span class="highlight">clear</span>: Limpia la pantalla.
+            `;
+            historial.appendChild(lineaRespuesta);
+            break;
+
+          case 'perfil':
+            lineaRespuesta.innerHTML = `
+              [ESTADO DENTRO DE LA MATRIX]<br>
+              Alias: <span class="highlight">${escapeHTML(nombreUsuario)}</span><br>
+              Nivel: 67<br>
+              Habilidad: No descubierta
+            `;
+            historial.appendChild(lineaRespuesta);
+            break;
+
+          case 'recuerdos':
+            lineaRespuesta.innerHTML = `no recuerdo nada XD`;
+            historial.appendChild(lineaRespuesta);
+            break;
+
+          case 'secreto':
+            lineaRespuesta.innerHTML = `
+              <span style="color: #ffbd2e;">[PAQUETE DESENCRIPTADO]</span><br>
+              solo quería decirte que gracias por ser mi amigo :3
+            `;
+            historial.appendChild(lineaRespuesta);
+            break;
+
+          case 'date':
+            lineaRespuesta.innerHTML = `Fecha y hora del sistema: <span class="highlight">${new Date().toLocaleString()}</span>`;
+            historial.appendChild(lineaRespuesta);
+            break;
+
+          case 'say':
+            if (argumento) {
+              sayOverlay.textContent = argumento;
+              sayOverlay.classList.add('show');
+              clearTimeout(sayTimeout);
+              sayTimeout = setTimeout(() => {
+                sayOverlay.classList.remove('show');
+              }, 3000);
+              lineaRespuesta.innerHTML = `[MENSAJE MOSTRADO EN PANTALLA]`;
+            } else {
+              lineaRespuesta.innerHTML = `Uso: <span class="highlight">say [tu mensaje aquí]</span>`;
             }
+            historial.appendChild(lineaRespuesta);
+            break;
 
-            btnStart.addEventListener('click', checkName);
-            nameInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    checkName();
-                }
-            });
+          case 'sudo':
+            lineaRespuesta.innerHTML = `<span style="color: #ff5f56;">[ACCESO DENEGADO]</span> No tienes suficientes privilegios para hackear la Matrix...aún (por nuv).`;
+            historial.appendChild(lineaRespuesta);
+            break;
 
-            function typeWriter(text, element) {
-                element.textContent = '';
-                let i = 0;
-                function type() {
-                    if (i < text.length) {
-                        element.textContent += text.charAt(i);
-                        i++;
-                        setTimeout(type, 35);
-                    }
-                }
-                type();
+          case 'matrix':
+            if (argumento === 'rojo') {
+              matrixColor = '#ff0055';
+              lineaRespuesta.innerHTML = 'Color de Matrix cambiado a <span style="color: #ff0055;">Rojo</span>.';
+            } else if (argumento === 'azul') {
+              matrixColor = '#00ccff';
+              lineaRespuesta.innerHTML = 'Color de Matrix cambiado a <span style="color: #00ccff;">Azul</span>.';
+            } else if (argumento === 'verde') {
+              matrixColor = '#00ff66';
+              lineaRespuesta.innerHTML = 'Color de Matrix cambiado a <span style="color: #00ff66;">Verde</span>.';
+            } else {
+              lineaRespuesta.innerHTML = 'Uso: <span class="highlight">matrix rojo</span>, <span class="highlight">matrix azul</span> o <span class="highlight">matrix verde</span>.';
             }
+            historial.appendChild(lineaRespuesta);
+            break;
 
-            function spawnFallingPixelHeart() {
-                const heart = document.createElement('div');
-                heart.className = 'falling-pixel-heart';
-                heart.innerHTML = `<svg viewBox="0 0 9 9" fill="none"><path d="M2 1H4V2H2V1Z" fill="#000"/><path d="M5 1H7V2H5V1Z" fill="#000"/><path d="M1 2H2V4H1V2Z" fill="#000"/><path d="M4 2H5V3H4V2Z" fill="#000"/><path d="M7 2H8V4H7V2Z" fill="#000"/><path d="M0 3H1V5H0V3Z" fill="#000"/><path d="M8 3H9V5H8V3Z" fill="#000"/><path d="M1 5H2V6H1V5Z" fill="#000"/><path d="M7 5H8V6H7V5Z" fill="#000"/><path d="M2 6H3V7H2V6Z" fill="#000"/><path d="M6 6H7V7H6V6Z" fill="#000"/><path d="M3 7H4V8H3V7Z" fill="#000"/><path d="M5 7H6V8H5V7Z" fill="#000"/><path d="M4 8H5V9H4V8Z" fill="#000"/><path d="M2 2H4V3H2V2Z" fill="#8B0000"/><path d="M5 2H7V3H5V2Z" fill="#8B0000"/><path d="M1 3H8V5H1V3Z" fill="#8B0000"/><path d="M2 5H7V6H2V5Z" fill="#660000"/><path d="M3 6H6V7H3V6Z" fill="#660000"/><path d="M4 7H5V8H4V7Z" fill="#4A0000"/><path d="M2 2H3V3H2V2Z" fill="#FF6666"/><path d="M1 3H2V4H1V3Z" fill="#FF6666"/></svg>`;
+          case 'destroy':
+            terminalContainer.classList.add('glitch-mode');
+            lineaRespuesta.innerHTML = `<span style="color: #ff0000; font-weight: bold;">[ALERTA CRÍTICA] FALLO DE NÚCLEO... REINICIANDO TERMINAL EN 3 SEGUNDOS.</span>`;
+            historial.appendChild(lineaRespuesta);
+            setTimeout(() => {
+              historial.innerHTML = '';
+              terminalContainer.classList.remove('glitch-mode');
+            }, 3000);
+            break;
 
-                const startX = Math.random() * 90 + 5;
-                const duration = 4 + Math.random() * 3;
+          case 'clear':
+            historial.innerHTML = '';
+            input.value = '';
+            return;
 
-                heart.style.left = `${startX}vw`;
-                heart.style.animationDuration = `${duration}s`;
+          default:
+            lineaRespuesta.innerHTML = `El comando "<span class="highlight">${escapeHTML(comando)}</span>" no se reconoce. Escribe <span class="highlight">help</span>.`;
+            historial.appendChild(lineaRespuesta);
+            break;
+        }
 
-                document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), duration * 1000);
-            }
+        input.value = '';
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+      }
+    });
 
-            for (let i = 0; i < 4; i++) {
-                const block = document.createElement('div');
-                block.className = 'bg-block';
-                block.style.left = `${Math.random() * 90}vw`;
-                block.style.animationDuration = `${8 + Math.random() * 6}s`;
-                block.style.animationDelay = `${Math.random() * 3}s`;
-                document.body.appendChild(block);
-            }
-
-            function playXpSound() {
-                try {
-                    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    if (audioCtx.state === 'suspended') audioCtx.resume();
-
-                    const now = audioCtx.currentTime;
-                    for (let i = 0; i < 3; i++) {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        const delay = i * 0.06;
-
-                        osc.frequency.setValueAtTime(600 + (i * 200), now + delay);
-                        gain.gain.setValueAtTime(0.15, now + delay);
-                        gain.gain.exponentialRampToValueAtTime(0.01, now + delay + 0.12);
-
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.start(now + delay);
-                        osc.stop(now + delay + 0.12);
-                    }
-                } catch (e) {}
-            }
-
-            btnMusic.addEventListener('click', () => {
-                if (bgMusic.paused) {
-                    bgMusic.play().then(() => {
-                        btnMusic.textContent = '🎵 BGM: ON';
-                    }).catch(() => {});
-                } else {
-                    bgMusic.pause();
-                    btnMusic.textContent = '🎵 BGM: OFF';
-                }
-            });
-
-            function createParticles() {
-                const rect = card.getBoundingClientRect();
-                const particleCount = 12;
-
-                for (let i = 0; i < particleCount; i++) {
-                    const particle = document.createElement('div');
-                    particle.className = 'xp-particle';
-
-                    const angle = Math.random() * Math.PI * 2;
-                    const distance = 40 + Math.random() * 60;
-                    const dx = Math.cos(angle) * distance;
-                    const dy = Math.sin(angle) * distance;
-
-                    particle.style.left = `${rect.left + rect.width / 2}px`;
-                    particle.style.top = `${rect.top + rect.height / 2}px`;
-                    particle.style.width = '6px';
-                    particle.style.height = '6px';
-                    particle.style.backgroundColor = xpColors[Math.floor(Math.random() * xpColors.length)];
-                    particle.style.setProperty('--dx', `${dx}px`);
-                    particle.style.setProperty('--dy', `${dy}px`);
-
-                    document.body.appendChild(particle);
-                    setTimeout(() => particle.remove(), 800);
-                }
-            }
-
-            function unlockAchievement() {
-                if (isUnlocked) return;
-                isUnlocked = true;
-
-                flash.classList.add('active');
-                card.classList.add('unlocked');
-                xpBarFill.style.width = '100%';
-                counterText.textContent = 'DÍAS JUNTOS | XP 100%';
-
-                splashText.textContent = splashes[Math.floor(Math.random() * splashes.length)];
-
-                btn.textContent = '¡Logro Completado!';
-                btn.disabled = true;
-
-                secretMsg.classList.add('visible');
-                setTimeout(() => typeWriter(fullText, typedText), 200);
-
-                playXpSound();
-                createParticles();
-
-                if (bgMusic.paused) {
-                    bgMusic.play().then(() => {
-                        btnMusic.textContent = '🎵 BGM: ON';
-                    }).catch(() => {});
-                }
-
-                setInterval(spawnFallingPixelHeart, 600);
-            }
-
-            btn.addEventListener('click', unlockAchievement);
-            card.addEventListener('click', unlockAchievement);
-        });
-    </script>
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+  </script>
 </body>
 </html>
