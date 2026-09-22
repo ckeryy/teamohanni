@@ -3,527 +3,504 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terminal Matrix Pro</title>
+  <title>Feliz Día de la Flor Amarilla</title>
+  <!-- Importación de fuentes de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&family=Sacramento&display=swap" rel="stylesheet">
   
-  <!-- Importación de fuente estilo Minecraft -->
-  <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
-
   <style>
+    :root {
+      --neon-yellow: #ffff00;
+      --neon-green: #ccff00;
+      --glow-light: #ffffff;
+      --bg-color: #030308;
+    }
+
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      background-color: #000;
-      color: #00ff66;
-      font-family: 'Courier New', Courier, monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background-color: var(--bg-color);
       min-height: 100vh;
-      padding: 20px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    #matrixCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
-
-    /* Overlay para mensajes flotantes de Say con fuente estilo Minecraft */
-    #sayOverlay {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 20;
-      color: #ffffff;
-      font-family: 'Minecraftia', 'Courier New', monospace;
-      font-size: 20px;
-      text-align: center;
-      text-shadow: 2px 2px 0px #000000, 0 0 10px #00ff66;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      white-space: nowrap;
-      image-rendering: pixelated;
-    }
-
-    #sayOverlay.show {
-      opacity: 1;
-    }
-
-    /* Modal de Bienvenida */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.85);
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(5px);
-    }
-
-    .modal-box {
-      background-color: rgba(10, 10, 10, 0.95);
-      border: 2px solid #00ff66;
-      border-radius: 8px;
-      padding: 25px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 0 30px rgba(0, 255, 102, 0.5);
-      text-align: center;
-    }
-
-    .modal-box h2 {
-      margin-bottom: 15px;
-      font-size: 18px;
-      color: #00ff66;
-    }
-
-    .modal-box input {
-      width: 100%;
-      padding: 10px;
-      background: #000;
-      border: 1px solid #00ff66;
-      color: #00ff66;
-      font-family: inherit;
-      font-size: 16px;
-      border-radius: 4px;
-      outline: none;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-
-    .modal-box button {
-      background-color: #00ff66;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      font-family: inherit;
-      font-weight: bold;
-      font-size: 14px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .modal-box button:hover {
-      background-color: #ffffff;
-      box-shadow: 0 0 10px #ffffff;
-    }
-
-    /* Terminal Container */
-    .terminal-container {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      max-width: 700px;
-      background-color: rgba(0, 0, 0, 0.85);
-      border: 2px solid #00ff66;
-      border-radius: 8px;
-      box-shadow: 0 0 25px rgba(0, 255, 102, 0.4);
-      overflow: hidden;
-      backdrop-filter: blur(4px);
-    }
-
-    .terminal-container::before {
-      content: " ";
-      position: absolute;
-      top: 0; left: 0; bottom: 0; right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-      background-size: 100% 4px;
-      z-index: 3;
-      pointer-events: none;
-    }
-
-    .terminal-header {
-      background-color: rgba(26, 26, 26, 0.9);
-      padding: 8px 15px;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #333;
-    }
-
-    .buttons {
-      display: flex;
-      gap: 8px;
-    }
-
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-
-    .red { background-color: #ff5f56; }
-    .yellow { background-color: #ffbd2e; }
-    .green { background-color: #27c93f; }
-
-    .title {
-      color: #888;
-      font-size: 13px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .terminal-body {
-      padding: 20px;
-      height: 400px;
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+      position: relative;
     }
 
-    .line {
-      margin-bottom: 10px;
+    /* Canvas para la Galaxia y Estrellas Fugaces */
+    #galaxyCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    /* Ventana Modal de Bienvenida */
+    .welcome-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(3, 3, 8, 0.88);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+      padding: 20px;
+    }
+
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      padding: 35px 25px;
+      text-align: center;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 255, 0, 0.15);
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .welcome-title {
+      font-family: 'Dancing Script', cursive;
+      color: #ffffff;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-shadow: 0 0 12px var(--neon-yellow);
+    }
+
+    .welcome-subtitle {
+      font-family: 'Dancing Script', cursive;
+      color: #eeeeee;
+      font-size: 1.45rem;
       line-height: 1.4;
-      word-break: break-word;
+      margin-bottom: 28px;
     }
 
-    .prompt-line {
+    .start-btn {
+      font-family: 'Dancing Script', cursive;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      border: 2px solid var(--neon-yellow);
+      padding: 10px 32px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 255, 0, 0.4);
+      transition: all 0.3s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .start-btn:hover {
+      background: var(--neon-yellow);
+      color: #000000;
+      box-shadow: 0 0 25px var(--neon-yellow);
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    .start-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .welcome-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* Tarjeta estilo Cristal */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 20px 15px 25px 15px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      max-width: 380px;
+      position: relative;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      width: 100%;
+      animation: float 4s ease-in-out infinite;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .rotating-head {
+      transform-origin: 200px 150px;
+      animation: spin 18s linear infinite;
+      transition: animation-duration 0.5s ease;
+    }
+
+    .container:hover .rotating-head {
+      animation-duration: 5s;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .neon-glow {
+      animation: pulse 2.5s ease-in-out infinite alternate;
+      transition: filter 0.3s ease;
+    }
+
+    @keyframes pulse {
+      0% { filter: drop-shadow(0 0 8px var(--neon-yellow)) drop-shadow(0 0 15px var(--neon-yellow)); }
+      100% { filter: drop-shadow(0 0 18px var(--neon-yellow)) drop-shadow(0 0 35px var(--glow-light)); }
+    }
+
+    .shadow {
+      width: 90px;
+      height: 12px;
+      background: rgba(204, 255, 0, 0.25);
+      border-radius: 50%;
+      filter: blur(8px);
+      margin-top: 5px;
+      animation: shadow-scale 4s ease-in-out infinite;
+    }
+
+    @keyframes shadow-scale {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(0.6); opacity: 0.2; }
+    }
+
+    .neon-text {
+      color: #ffffff;
+      margin-top: 18px;
+      font-size: 0.95rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow);
+      user-select: none;
+      transition: text-shadow 0.3s ease;
+    }
+
+    .counter-badge {
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    .prompt-label {
-      color: #00ff66;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-
-    input[type="text"] {
-      background: transparent;
-      border: none;
-      color: #00ff66;
-      font-family: inherit;
-      font-size: 16px;
-      outline: none;
-      width: 100%;
-    }
-
-    .system-msg {
-      color: #888888;
-    }
-
-    .highlight {
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 6px 14px;
+      margin-top: 12px;
       color: #ffffff;
-      font-weight: bold;
+      font-size: 0.85rem;
+      user-select: none;
     }
 
-    @keyframes alertFlash {
-      0% { background-color: rgba(255, 0, 0, 0.8); }
-      50% { background-color: rgba(0, 0, 0, 0.9); }
-      100% { background-color: rgba(255, 0, 0, 0.8); }
+    .heart-icon {
+      color: var(--neon-yellow);
+      transition: transform 0.2s ease, color 0.3s ease;
     }
 
-    .glitch-mode {
-      animation: alertFlash 0.2s infinite;
-      border-color: #ff0000;
-      box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+    /* Partículas al tocar */
+    .particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: var(--neon-yellow);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--neon-yellow);
+      pointer-events: none;
+      animation: sparkle 0.8s forwards ease-out;
+    }
+
+    @keyframes sparkle {
+      0% { opacity: 1; transform: translate(0, 0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); }
+    }
+
+    /* Mensaje final al pie de la pantalla */
+    .footer-love-text {
+      font-family: 'Sacramento', cursive;
+      color: #ffffff;
+      font-size: 2.8rem;
+      margin-top: 25px;
+      text-align: center;
+      text-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow), 0 0 30px var(--neon-yellow);
+      user-select: none;
+      animation: glowText 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowText {
+      0% { opacity: 0.8; transform: scale(0.98); }
+      100% { opacity: 1; transform: scale(1.02); }
     }
   </style>
 </head>
 <body>
 
-  <!-- Texto flotante en pantalla -->
-  <div id="sayOverlay"></div>
+  <!-- Canvas Galáctico -->
+  <canvas id="galaxyCanvas"></canvas>
 
-  <!-- Modal para pedir el nombre -->
-  <div class="modal-overlay" id="modalName">
-    <div class="modal-box">
-      <h2>IDENTIFICACIÓN REQUERIDA</h2>
-      <p style="margin-bottom: 15px; font-size: 14px; color: #888;">Ingresa tu alias para ingresar a la Matrix:</p>
-      <input type="text" id="inputNombreModal" placeholder="Tu alias aquí..." autofocus autocomplete="off">
-      <button id="btnEntrar">INGRESAR</button>
+  <!-- Mensaje de Bienvenida -->
+  <div class="welcome-overlay" id="welcomeOverlay">
+    <div class="welcome-card">
+      <h1 class="welcome-title">¡Feliz Primavera!</h1>
+      <p class="welcome-subtitle">Hoy es un día especial para llenar tu camino de luz, alegría y flores amarillas.</p>
+      <button class="start-btn" id="startBtn">Ver mi regalo</button>
     </div>
   </div>
 
-  <canvas id="matrixCanvas"></canvas>
+  <!-- Tarjeta Cristal -->
+  <div class="glass-card">
+    <div class="container" id="flowerContainer">
+      <svg width="400" height="420" viewBox="0 0 400 420" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="petal-grad" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="var(--neon-yellow)" stop-opacity="0.2"/>
+            <stop offset="100%" stop-color="var(--neon-yellow)" stop-opacity="1"/>
+          </linearGradient>
 
-  <div class="terminal-container" id="terminalContainer">
-    <div class="terminal-header">
-      <div class="buttons">
-        <div class="dot red"></div>
-        <div class="dot yellow"></div>
-        <div class="dot green"></div>
-      </div>
-      <div class="title">matrix_terminal.sh</div>
+          <g id="single-petal">
+            <path d="M 200,150 C 180,100 185,50 200,30 C 215,50 220,100 200,150 Z" 
+                  fill="url(#petal-grad)" 
+                  stroke="#ffffaa" 
+                  stroke-width="2"/>
+          </g>
+        </defs>
+
+        <!-- Tallo y Hojas -->
+        <g>
+          <path d="M 200,150 Q 198,260 200,370" 
+                fill="none" 
+                stroke="var(--neon-green)" 
+                stroke-width="8" 
+                stroke-linecap="round"
+                filter="drop-shadow(0 0 10px var(--neon-green))"/>
+
+          <path d="M 198,240 C 150,230 140,200 150,190 C 170,200 190,220 198,240 Z" 
+                fill="rgba(204, 255, 0, 0.3)" 
+                stroke="var(--neon-green)" 
+                stroke-width="2"
+                filter="drop-shadow(0 0 8px var(--neon-green))"/>
+
+          <path d="M 202,270 C 250,260 260,230 250,220 C 230,230 210,250 202,270 Z" 
+                fill="rgba(204, 255, 0, 0.3)" 
+                stroke="var(--neon-green)" 
+                stroke-width="2"
+                filter="drop-shadow(0 0 8px var(--neon-green))"/>
+        </g>
+
+        <!-- Cabeza de la flor -->
+        <g class="rotating-head neon-glow">
+          <use href="#single-petal" transform="rotate(0, 200, 150)"/>
+          <use href="#single-petal" transform="rotate(45, 200, 150)"/>
+          <use href="#single-petal" transform="rotate(90, 200, 150)"/>
+          <use href="#single-petal" transform="rotate(135, 200, 150)"/>
+          <use href="#single-petal" transform="rotate(180, 200, 150)"/>
+          <use href="#single-petal" transform="rotate(225, 200, 150)"/>
+          <use href="#single-petal" transform="rotate(270, 200, 150)"/>
+          <use href="#single-petal" transform="rotate(315, 200, 150)"/>
+
+          <circle cx="200" cy="150" r="25" fill="var(--glow-light)" filter="drop-shadow(0 0 15px var(--neon-yellow))"/>
+        </g>
+      </svg>
+
+      <div class="shadow"></div>
+      <div class="neon-text">Toca la flor</div>
     </div>
 
-    <div class="terminal-body" id="terminalBody">
-      <div class="line system-msg">Conexión establecida con la Matrix... [OK]</div>
-      <div class="line">Bienvenido. Escribe <span class="highlight">help</span> para ver los comandos. Usa <span class="highlight">Tab</span> para autocompletar.</div>
-      
-      <div id="historial"></div>
-
-      <div class="prompt-line">
-        <span class="prompt-label" id="promptLabel">usuario&gt;</span>
-        <input type="text" id="inputComando" autocomplete="off">
-      </div>
+    <!-- Contador de toques -->
+    <div class="counter-badge">
+      <span class="heart-icon" id="heartIcon">♥</span>
+      <span id="clickCounter">0</span> Toques
     </div>
   </div>
+
+  <!-- Mensaje Especial al Pie -->
+  <div class="footer-love-text">Te amo HANNI :3</div>
 
   <script>
-    // --- MANEJO DEL NOMBRE DE USUARIO ---
-    let nombreUsuario = 'usuario';
-    const modalName = document.getElementById('modalName');
-    const inputNombreModal = document.getElementById('inputNombreModal');
-    const btnEntrar = document.getElementById('btnEntrar');
-    const promptLabel = document.getElementById('promptLabel');
-    const input = document.getElementById('inputComando');
+    const welcomeOverlay = document.getElementById('welcomeOverlay');
+    const startBtn = document.getElementById('startBtn');
+    const container = document.getElementById('flowerContainer');
+    const counterDisplay = document.getElementById('clickCounter');
+    const heartIcon = document.getElementById('heartIcon');
+    const colores = ['#ffff00', '#00ffff', '#ff007f', '#39ff14'];
+    let indiceColor = 0;
+    let count = 0;
 
-    function fijarNombre() {
-      const nombreIngresado = inputNombreModal.value.trim();
-      if (nombreIngresado !== '') {
-        nombreUsuario = nombreIngresado;
-      }
-      promptLabel.textContent = `${nombreUsuario}>`;
-      modalName.style.display = 'none';
-      input.focus();
-    }
-
-    btnEntrar.addEventListener('click', fijarNombre);
-    inputNombreModal.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') fijarNombre();
+    // Cerrar bienvenida
+    startBtn.addEventListener('click', () => {
+      welcomeOverlay.classList.add('hidden');
     });
 
-    // --- ANIMACIÓN MATRIX ---
-    const canvas = document.getElementById('matrixCanvas');
+    // Interacción con la flor
+    container.addEventListener('pointerdown', (e) => {
+      count++;
+      counterDisplay.textContent = count;
+      heartIcon.style.transform = 'scale(1.4)';
+      setTimeout(() => heartIcon.style.transform = 'scale(1)', 200);
+
+      indiceColor = (indiceColor + 1) % colores.length;
+      document.documentElement.style.setProperty('--neon-yellow', colores[indiceColor]);
+
+      const rect = container.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      for (let i = 0; i < 16; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 30 + Math.random() * 50;
+        const dx = Math.cos(angle) * distance + 'px';
+        const dy = Math.sin(angle) * distance + 'px';
+
+        particle.style.left = `${clickX}px`;
+        particle.style.top = `${clickY}px`;
+        particle.style.setProperty('--dx', dx);
+        particle.style.setProperty('--dy', dy);
+
+        container.appendChild(particle);
+
+        setTimeout(() => particle.remove(), 800);
+      }
+    });
+
+    /* --- EFECTO GALAXIA Y ESTRELLAS FUGACES --- */
+    const canvas = document.getElementById('galaxyCanvas');
     const ctx = canvas.getContext('2d');
 
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
-    resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%';
-    const fontSize = 16;
-    let columns = Math.floor(canvas.width / fontSize);
-    let drops = Array(columns).fill(1);
-    let matrixColor = '#00ff66';
+    // Crear estrellas fijas
+    const stars = [];
+    const numStars = 150;
+    for (let i = 0; i < numStars; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.5,
+        alpha: Math.random(),
+        speed: 0.005 + Math.random() * 0.015
+      });
+    }
 
-    function drawMatrix() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    // Crear estrellas fugaces
+    const shootingStars = [];
+
+    function addShootingStar() {
+      shootingStars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * (canvas.height / 2),
+        length: 80 + Math.random() * 60,
+        speed: 8 + Math.random() * 6,
+        dx: 4 + Math.random() * 2,
+        dy: 4 + Math.random() * 2,
+        alpha: 1
+      });
+    }
+
+    // Generar estrellas fugaces periódicamente
+    setInterval(addShootingStar, 2500);
+
+    function animateGalaxy() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Dibujar nebulosa sutil de galaxia
+      const bgGradient = ctx.createRadialGradient(
+        canvas.width / 2, canvas.height / 2, 50,
+        canvas.width / 2, canvas.height / 2, Math.max(canvas.width, canvas.height)
+      );
+      bgGradient.addColorStop(0, 'rgba(25, 10, 45, 0.4)');
+      bgGradient.addColorStop(0.5, 'rgba(10, 5, 25, 0.2)');
+      bgGradient.addColorStop(1, 'rgba(3, 3, 8, 0)');
+      ctx.fillStyle = bgGradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = matrixColor;
-      ctx.font = `${fontSize}px monospace`;
+      // Dibujar estrellas titilantes
+      stars.forEach(star => {
+        star.alpha += star.speed;
+        if (star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
 
-      const currentColumns = Math.floor(canvas.width / fontSize);
-      if (currentColumns !== columns) {
-        columns = currentColumns;
-        drops = Array(columns).fill(1);
-      }
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(star.alpha)})`;
+        ctx.fill();
+      });
 
-      for (let i = 0; i < drops.length; i++) {
-        const text = characters.charAt(Math.floor(Math.random() * characters.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      // Dibujar estrellas fugaces
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        
+        const grad = ctx.createLinearGradient(s.x, s.y, s.x - s.length, s.y - s.length);
+        grad.addColorStop(0, `rgba(255, 255, 255, ${s.alpha})`);
+        grad.addColorStop(0.3, `rgba(255, 255, 0, ${s.alpha * 0.8})`);
+        grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(s.x - s.length, s.y - s.length);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        s.x += s.dx;
+        s.y += s.dy;
+        s.alpha -= 0.012;
+
+        if (s.alpha <= 0 || s.x > canvas.width || s.y > canvas.height) {
+          shootingStars.splice(i, 1);
         }
-        drops[i]++;
       }
+
+      requestAnimationFrame(animateGalaxy);
     }
 
-    setInterval(drawMatrix, 33);
-
-    // --- LÓGICA DE LA TERMINAL ---
-    const historial = document.getElementById('historial');
-    const terminalBody = document.getElementById('terminalBody');
-    const terminalContainer = document.getElementById('terminalContainer');
-    const sayOverlay = document.getElementById('sayOverlay');
-    let sayTimeout;
-
-    const listaComandos = ['help', 'perfil', 'recuerdos', 'secreto', 'date', 'matrix', 'sudo', 'say', 'destroy', 'clear'];
-    let historialComandos = [];
-    let indiceHistorial = -1;
-
-    document.querySelector('.terminal-container').addEventListener('click', () => {
-      input.focus();
-    });
-
-    input.addEventListener('keydown', function(event) {
-      if (event.key === 'Tab') {
-        event.preventDefault();
-        const textoActual = input.value.trim().toLowerCase();
-        if (!textoActual) return;
-        const coincidencia = listaComandos.find(c => c.startsWith(textoActual));
-        if (coincidencia) {
-          input.value = coincidencia;
-        }
-      }
-
-      if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        if (historialComandos.length > 0 && indiceHistorial < historialComandos.length - 1) {
-          indiceHistorial++;
-          input.value = historialComandos[historialComandos.length - 1 - indiceHistorial];
-        }
-      } else if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        if (indiceHistorial > 0) {
-          indiceHistorial--;
-          input.value = historialComandos[historialComandos.length - 1 - indiceHistorial];
-        } else if (indiceHistorial === 0) {
-          indiceHistorial = -1;
-          input.value = '';
-        }
-      }
-
-      if (event.key === 'Enter') {
-        const valorOriginal = input.value;
-        const inputTrimmed = valorOriginal.trim();
-        if (inputTrimmed === '') return;
-
-        historialComandos.push(valorOriginal);
-        indiceHistorial = -1;
-
-        const partes = inputTrimmed.split(' ');
-        const comando = partes[0].toLowerCase();
-        const argumento = partes.slice(1).join(' ');
-
-        const lineaComando = document.createElement('div');
-        lineaComando.className = 'line';
-        lineaComando.innerHTML = `<span class="prompt-label">${escapeHTML(nombreUsuario)}&gt;</span> ${escapeHTML(valorOriginal)}`;
-        historial.appendChild(lineaComando);
-
-        const lineaRespuesta = document.createElement('div');
-        lineaRespuesta.className = 'line';
-
-        switch (comando) {
-          case 'help':
-            lineaRespuesta.innerHTML = `
-              Comandos disponibles:<br>
-              - <span class="highlight">perfil</span>: Estadísticas del usuario.<br>
-              - <span class="highlight">recuerdos</span>: Registro de momentos clave.<br>
-              - <span class="highlight">secreto</span>: Revela el mensaje oculto.<br>
-              - <span class="highlight">date</span>: Muestra la fecha y hora del sistema.<br>
-              - <span class="highlight">matrix [rojo|azul|verde]</span>: Cambia el color de la Matrix.<br>
-              - <span class="highlight">say [texto]</span>: Muestra un mensaje flotante en pantalla.<br>
-              - <span class="highlight">sudo</span>: Solicita acceso de administrador.<br>
-              - <span class="highlight">destroy</span>: Simula un colapso del sistema.<br>
-              - <span class="highlight">clear</span>: Limpia la pantalla.
-            `;
-            historial.appendChild(lineaRespuesta);
-            break;
-
-          case 'perfil':
-            lineaRespuesta.innerHTML = `
-              [ESTADO DENTRO DE LA MATRIX]<br>
-              Alias: <span class="highlight">${escapeHTML(nombreUsuario)}</span><br>
-              Nivel: 67<br>
-              Habilidad: No descubierta
-            `;
-            historial.appendChild(lineaRespuesta);
-            break;
-
-          case 'recuerdos':
-            lineaRespuesta.innerHTML = `no recuerdo nada XD`;
-            historial.appendChild(lineaRespuesta);
-            break;
-
-          case 'secreto':
-            lineaRespuesta.innerHTML = `
-              <span style="color: #ffbd2e;">[PAQUETE DESENCRIPTADO]</span><br>
-              solo quería decirte que gracias por ser mi amigo :3
-            `;
-            historial.appendChild(lineaRespuesta);
-            break;
-
-          case 'date':
-            lineaRespuesta.innerHTML = `Fecha y hora del sistema: <span class="highlight">${new Date().toLocaleString()}</span>`;
-            historial.appendChild(lineaRespuesta);
-            break;
-
-          case 'say':
-            if (argumento) {
-              sayOverlay.textContent = argumento;
-              sayOverlay.classList.add('show');
-              clearTimeout(sayTimeout);
-              sayTimeout = setTimeout(() => {
-                sayOverlay.classList.remove('show');
-              }, 3000);
-              lineaRespuesta.innerHTML = `[MENSAJE MOSTRADO EN PANTALLA]`;
-            } else {
-              lineaRespuesta.innerHTML = `Uso: <span class="highlight">say [tu mensaje aquí]</span>`;
-            }
-            historial.appendChild(lineaRespuesta);
-            break;
-
-          case 'sudo':
-            lineaRespuesta.innerHTML = `<span style="color: #ff5f56;">[ACCESO DENEGADO]</span> No tienes suficientes privilegios para hackear la Matrix...aún (por nuv).`;
-            historial.appendChild(lineaRespuesta);
-            break;
-
-          case 'matrix':
-            if (argumento === 'rojo') {
-              matrixColor = '#ff0055';
-              lineaRespuesta.innerHTML = 'Color de Matrix cambiado a <span style="color: #ff0055;">Rojo</span>.';
-            } else if (argumento === 'azul') {
-              matrixColor = '#00ccff';
-              lineaRespuesta.innerHTML = 'Color de Matrix cambiado a <span style="color: #00ccff;">Azul</span>.';
-            } else if (argumento === 'verde') {
-              matrixColor = '#00ff66';
-              lineaRespuesta.innerHTML = 'Color de Matrix cambiado a <span style="color: #00ff66;">Verde</span>.';
-            } else {
-              lineaRespuesta.innerHTML = 'Uso: <span class="highlight">matrix rojo</span>, <span class="highlight">matrix azul</span> o <span class="highlight">matrix verde</span>.';
-            }
-            historial.appendChild(lineaRespuesta);
-            break;
-
-          case 'destroy':
-            terminalContainer.classList.add('glitch-mode');
-            lineaRespuesta.innerHTML = `<span style="color: #ff0000; font-weight: bold;">[ALERTA CRÍTICA] FALLO DE NÚCLEO... REINICIANDO TERMINAL EN 3 SEGUNDOS.</span>`;
-            historial.appendChild(lineaRespuesta);
-            setTimeout(() => {
-              historial.innerHTML = '';
-              terminalContainer.classList.remove('glitch-mode');
-            }, 3000);
-            break;
-
-          case 'clear':
-            historial.innerHTML = '';
-            input.value = '';
-            return;
-
-          default:
-            lineaRespuesta.innerHTML = `El comando "<span class="highlight">${escapeHTML(comando)}</span>" no se reconoce. Escribe <span class="highlight">help</span>.`;
-            historial.appendChild(lineaRespuesta);
-            break;
-        }
-
-        input.value = '';
-        terminalBody.scrollTop = terminalBody.scrollHeight;
-      }
-    });
-
-    function escapeHTML(str) {
-      return str.replace(/[&<>'"]/g, 
-        tag => ({
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          "'": '&#39;',
-          '"': '&quot;'
-        }[tag] || tag)
-      );
-    }
+    animateGalaxy();
   </script>
+
 </body>
 </html>
