@@ -7,14 +7,17 @@
   <!-- Importación de fuentes de Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&family=Sacramento&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@600;800&family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --neon-yellow: #ffff00;
-      --neon-green: #ccff00;
-      --glow-light: #ffffff;
-      --bg-color: #030308;
+      --flower-yellow: #f1c40f;
+      --flower-warm-yellow: #f39c12;
+      --flower-light-yellow: #fef9e7;
+      --stem-green: #27ae60;
+      --leaf-dark: #1e8449;
+      --ribbon-pink: #e84393;
+      --bg-color: #0b0c10;
     }
 
     * {
@@ -30,20 +33,51 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       font-family: 'Poppins', system-ui, -apple-system, sans-serif;
       position: relative;
+      padding: 30px 10px;
     }
 
-    /* Canvas para la Galaxia y Estrellas Fugaces */
+    /* Canvas para Fondo Estelar */
     #galaxyCanvas {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       z-index: -2;
       pointer-events: none;
+    }
+
+    /* Botón Flotante de Música */
+    .music-control {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: #ffffff;
+      padding: 10px 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .music-control:hover {
+      background: rgba(241, 196, 15, 0.2);
+      border-color: var(--flower-yellow);
+      transform: scale(1.05);
     }
 
     /* Ventana Modal de Bienvenida */
@@ -53,7 +87,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(3, 3, 8, 0.88);
+      background: rgba(11, 12, 16, 0.92);
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
       display: flex;
@@ -72,7 +106,7 @@
       text-align: center;
       max-width: 380px;
       width: 100%;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 255, 0, 0.15);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 30px rgba(241, 196, 15, 0.15);
       animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
@@ -87,7 +121,7 @@
       font-size: 2.5rem;
       font-weight: 700;
       margin-bottom: 12px;
-      text-shadow: 0 0 12px var(--neon-yellow);
+      text-shadow: 0 0 12px rgba(241, 196, 15, 0.6);
     }
 
     .welcome-subtitle {
@@ -102,21 +136,21 @@
       font-family: 'Dancing Script', cursive;
       background: rgba(255, 255, 255, 0.05);
       color: #ffffff;
-      border: 2px solid var(--neon-yellow);
+      border: 2px solid var(--flower-yellow);
       padding: 10px 32px;
       font-size: 1.5rem;
       font-weight: 700;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 0 15px rgba(255, 255, 0, 0.4);
+      box-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
       transition: all 0.3s ease;
       -webkit-tap-highlight-color: transparent;
     }
 
     .start-btn:hover {
-      background: var(--neon-yellow);
+      background: var(--flower-yellow);
       color: #000000;
-      box-shadow: 0 0 25px var(--neon-yellow);
+      box-shadow: 0 0 25px var(--flower-yellow);
       transform: translateY(-2px) scale(1.03);
     }
 
@@ -142,7 +176,7 @@
       flex-direction: column;
       align-items: center;
       width: 90%;
-      max-width: 380px;
+      max-width: 420px;
       position: relative;
     }
 
@@ -160,42 +194,35 @@
     svg {
       width: 100%;
       height: auto;
+      overflow: visible;
     }
 
     @keyframes float {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
+      50% { transform: translateY(-10px); }
     }
 
-    .rotating-head {
-      transform-origin: 200px 150px;
-      animation: spin 18s linear infinite;
-      transition: animation-duration 0.5s ease;
+    /* Animación de Balanceo Natural */
+    .bouquet-animated {
+      transform-origin: 200px 380px;
+      animation: wind-sway 5s ease-in-out infinite;
     }
 
-    .container:hover .rotating-head {
-      animation-duration: 5s;
+    @keyframes wind-sway {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(2deg) scale(1.01); }
+      75% { transform: rotate(-2deg) scale(0.99); }
     }
 
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .neon-glow {
-      animation: pulse 2.5s ease-in-out infinite alternate;
+    .soft-glow {
+      filter: drop-shadow(0 4px 15px rgba(241, 196, 15, 0.25));
       transition: filter 0.3s ease;
     }
 
-    @keyframes pulse {
-      0% { filter: drop-shadow(0 0 8px var(--neon-yellow)) drop-shadow(0 0 15px var(--neon-yellow)); }
-      100% { filter: drop-shadow(0 0 18px var(--neon-yellow)) drop-shadow(0 0 35px var(--glow-light)); }
-    }
-
     .shadow {
-      width: 90px;
+      width: 110px;
       height: 12px;
-      background: rgba(204, 255, 0, 0.25);
+      background: rgba(0, 0, 0, 0.4);
       border-radius: 50%;
       filter: blur(8px);
       margin-top: 5px;
@@ -203,19 +230,8 @@
     }
 
     @keyframes shadow-scale {
-      0%, 100% { transform: scale(1); opacity: 0.5; }
-      50% { transform: scale(0.6); opacity: 0.2; }
-    }
-
-    .neon-text {
-      color: #ffffff;
-      margin-top: 18px;
-      font-size: 0.95rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow);
-      user-select: none;
-      transition: text-shadow 0.3s ease;
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(0.7); opacity: 0.3; }
     }
 
     .counter-badge {
@@ -233,51 +249,68 @@
     }
 
     .heart-icon {
-      color: var(--neon-yellow);
+      color: var(--flower-yellow);
       transition: transform 0.2s ease, color 0.3s ease;
+      display: inline-block;
     }
 
-    /* Partículas al tocar */
+    /* Partículas de pétalos al tocar */
     .particle {
       position: absolute;
-      width: 6px;
-      height: 6px;
-      background-color: var(--neon-yellow);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--neon-yellow);
+      width: 100px;
+      height: 10px;
+      background-color: var(--flower-yellow);
+      border-radius: 80% 0 80% 0;
       pointer-events: none;
-      animation: sparkle 0.8s forwards ease-out;
+      animation: sparkle 1.2s forwards ease-out;
     }
 
     @keyframes sparkle {
-      0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); }
+      0% { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(360deg) scale(0.2); }
     }
 
-    /* Mensaje final al pie de la pantalla */
     .footer-love-text {
-      font-family: 'Sacramento', cursive;
+      font-family: 'Pacifico', cursive;
       color: #ffffff;
-      font-size: 2.8rem;
+      font-size: 2.5rem;
       margin-top: 25px;
       text-align: center;
-      text-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow), 0 0 30px var(--neon-yellow);
+      text-shadow: 0 4px 15px rgba(241, 196, 15, 0.5);
       user-select: none;
       animation: glowText 3s ease-in-out infinite alternate;
     }
 
+    .highlight-name {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: var(--flower-yellow);
+    }
+
     @keyframes glowText {
-      0% { opacity: 0.8; transform: scale(0.98); }
+      0% { opacity: 0.85; transform: scale(0.98); }
       100% { opacity: 1; transform: scale(1.02); }
     }
   </style>
 </head>
 <body>
 
+  <!-- Audio apuntando a raw.githubusercontent.com directo -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="https://raw.githubusercontent.com/ckeryy/m-sica-i-love-you/main/canci%C3%B3n.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Botón flotante -->
+  <button class="music-control" id="musicToggle">
+    <span id="musicIcon">🎵</span>
+    <span id="musicText">Música</span>
+  </button>
+
   <!-- Canvas Galáctico -->
   <canvas id="galaxyCanvas"></canvas>
 
-  <!-- Mensaje de Bienvenida -->
+  <!-- Bienvenida -->
   <div class="welcome-overlay" id="welcomeOverlay">
     <div class="welcome-card">
       <h1 class="welcome-title">¡Feliz Primavera!</h1>
@@ -286,74 +319,135 @@
     </div>
   </div>
 
-  <!-- Tarjeta Cristal -->
+  <!-- Tarjeta Principal -->
   <div class="glass-card">
     <div class="container" id="flowerContainer">
-      <svg width="400" height="420" viewBox="0 0 400 420" xmlns="http://www.w3.org/2000/svg">
+      <svg width="400" height="450" viewBox="0 0 400 450" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="petal-grad" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" stop-color="var(--neon-yellow)" stop-opacity="0.2"/>
-            <stop offset="100%" stop-color="var(--neon-yellow)" stop-opacity="1"/>
+          <linearGradient id="petal-main" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#f39c12"/>
+            <stop offset="60%" stop-color="#f1c40f"/>
+            <stop offset="100%" stop-color="#fef9e7"/>
           </linearGradient>
 
-          <g id="single-petal">
-            <path d="M 200,150 C 180,100 185,50 200,30 C 215,50 220,100 200,150 Z" 
-                  fill="url(#petal-grad)" 
-                  stroke="#ffffaa" 
-                  stroke-width="2"/>
+          <linearGradient id="petal-secondary" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#e67e22"/>
+            <stop offset="70%" stop-color="#f1c40f"/>
+            <stop offset="100%" stop-color="#ffffff"/>
+          </linearGradient>
+
+          <linearGradient id="stem-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#1e8449"/>
+            <stop offset="100%" stop-color="#27ae60"/>
+          </linearGradient>
+
+          <radialGradient id="center-grad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#d35400"/>
+            <stop offset="70%" stop-color="#e67e22"/>
+            <stop offset="100%" stop-color="#935116"/>
+          </radialGradient>
+
+          <linearGradient id="ribbon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fd79a8"/>
+            <stop offset="100%" stop-color="#e84393"/>
+          </linearGradient>
+
+          <g id="flower">
+            <g transform="scale(0.95)" transform-origin="center">
+              <path d="M 0,0 C -15,-35 -10,-65 0,-80 C 10,-65 15,-35 0,0 Z" fill="url(#petal-secondary)"/>
+              <path d="M 0,0 C -15,-35 -10,-65 0,-80 C 10,-65 15,-35 0,0 Z" fill="url(#petal-secondary)" transform="rotate(45)"/>
+              <path d="M 0,0 C -15,-35 -10,-65 0,-80 C 10,-65 15,-35 0,0 Z" fill="url(#petal-secondary)" transform="rotate(90)"/>
+              <path d="M 0,0 C -15,-35 -10,-65 0,-80 C 10,-65 15,-35 0,0 Z" fill="url(#petal-secondary)" transform="rotate(135)"/>
+              <path d="M 0,0 C -15,-35 -10,-65 0,-80 C 10,-65 15,-35 0,0 Z" fill="url(#petal-secondary)" transform="rotate(180)"/>
+              <path d="M 0,0 C -15,-35 -10,-65 0,-80 C 10,-65 15,-35 0,0 Z" fill="url(#petal-secondary)" transform="rotate(225)"/>
+              <path d="M 0,0 C -15,-35 -10,-65 0,-80 C 10,-65 15,-35 0,0 Z" fill="url(#petal-secondary)" transform="rotate(270)"/>
+              <path d="M 0,0 C -15,-35 -10,-65 0,-80 C 10,-65 15,-35 0,0 Z" fill="url(#petal-secondary)" transform="rotate(315)"/>
+            </g>
+
+            <path d="M 0,0 C -18,-40 -12,-70 0,-85 C 12,-70 18,-40 0,0 Z" fill="url(#petal-main)"/>
+            <path d="M 0,0 C -18,-40 -12,-70 0,-85 C 12,-70 18,-40 0,0 Z" fill="url(#petal-main)" transform="rotate(30)"/>
+            <path d="M 0,0 C -18,-40 -12,-70 0,-85 C 12,-70 18,-40 0,0 Z" fill="url(#petal-main)" transform="rotate(60)"/>
+            <path d="M 0,0 C -18,-40 -12,-70 0,-85 C 12,-70 18,-40 0,0 Z" fill="url(#petal-main)" transform="rotate(90)"/>
+            <path d="M 0,0 C -18,-40 -12,-70 0,-85 C 12,-70 18,-40 0,0 Z" fill="url(#petal-main)" transform="rotate(120)"/>
+            <path d="M 0,0 C -18,-40 -12,-70 0,-85 C 12,-70 18,-40 0,0 Z" fill="url(#petal-main)" transform="rotate(150)"/>
+            <path d="M 0,0 C -18,-40 -12,-70 0,-85 C 12,-70 18,-40 0,0 Z" fill="url(#petal-main)" transform="rotate(180)"/>
+            <path d="M 0,0 C -18,-40 -12,-70 0,-85 C 12,-70 18,-40 0,0 Z" fill="url(#petal-main)" transform="rotate(210)"/>
+            <path d="M 0,0 C -18,-40 -12,-70 0,-85 C 12,-70 18,-40 0,0 Z" fill="url(#petal-main)" transform="rotate(240)"/>
+            <path d="M 0,0 C -18,-40 -12,-70 0,-85 C 12,-70 18,-40 0,0 Z" fill="url(#petal-main)" transform="rotate(270)"/>
+            <path d="M 0,0 C -18,-40 -12,-70 0,-85 C 12,-70 18,-40 0,0 Z" fill="url(#petal-main)" transform="rotate(300)"/>
+            <path d="M 0,0 C -18,-40 -12,-70 0,-85 C 12,-70 18,-40 0,0 Z" fill="url(#petal-main)" transform="rotate(330)"/>
+
+            <circle cx="0" cy="0" r="18" fill="url(#center-grad)"/>
+            <circle cx="0" cy="0" r="12" fill="#d35400" opacity="0.5"/>
+          </g>
+
+          <g id="leaf">
+            <path d="M 0,0 C -25,-20 -35,-50 0,-90 C 35,-50 25,-20 0,0 Z" fill="url(#stem-grad)"/>
+            <path d="M 0,0 Q -2,-45 0,-85" stroke="#1e8449" stroke-width="2" fill="none"/>
           </g>
         </defs>
 
-        <!-- Tallo y Hojas -->
-        <g>
-          <path d="M 200,150 Q 198,260 200,370" 
-                fill="none" 
-                stroke="var(--neon-green)" 
-                stroke-width="8" 
-                stroke-linecap="round"
-                filter="drop-shadow(0 0 10px var(--neon-green))"/>
+        <g class="bouquet-animated soft-glow">
+          <use href="#leaf" transform="translate(200, 260) rotate(-65) scale(1.1)"/>
+          <use href="#leaf" transform="translate(200, 260) rotate(65) scale(1.1)"/>
+          <use href="#leaf" transform="translate(200, 220) rotate(-40) scale(0.9)"/>
+          <use href="#leaf" transform="translate(200, 220) rotate(40) scale(0.9)"/>
+          <use href="#leaf" transform="translate(200, 180) rotate(-20) scale(0.8)"/>
 
-          <path d="M 198,240 C 150,230 140,200 150,190 C 170,200 190,220 198,240 Z" 
-                fill="rgba(204, 255, 0, 0.3)" 
-                stroke="var(--neon-green)" 
-                stroke-width="2"
-                filter="drop-shadow(0 0 8px var(--neon-green))"/>
+          <path d="M 200,380 Q 190,300 130,160" stroke="url(#stem-grad)" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <path d="M 200,380 Q 195,290 165,140" stroke="url(#stem-grad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M 200,380 Q 200,280 200,110" stroke="url(#stem-grad)" stroke-width="8" fill="none" stroke-linecap="round"/>
+          <path d="M 200,380 Q 205,290 235,140" stroke="url(#stem-grad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M 200,380 Q 210,300 270,160" stroke="url(#stem-grad)" stroke-width="7" fill="none" stroke-linecap="round"/>
 
-          <path d="M 202,270 C 250,260 260,230 250,220 C 230,230 210,250 202,270 Z" 
-                fill="rgba(204, 255, 0, 0.3)" 
-                stroke="var(--neon-green)" 
-                stroke-width="2"
-                filter="drop-shadow(0 0 8px var(--neon-green))"/>
-        </g>
+          <g transform="translate(110, 200) scale(0.35)">
+            <use href="#flower"/>
+          </g>
+          <g transform="translate(290, 200) scale(0.35)">
+            <use href="#flower"/>
+          </g>
 
-        <!-- Cabeza de la flor -->
-        <g class="rotating-head neon-glow">
-          <use href="#single-petal" transform="rotate(0, 200, 150)"/>
-          <use href="#single-petal" transform="rotate(45, 200, 150)"/>
-          <use href="#single-petal" transform="rotate(90, 200, 150)"/>
-          <use href="#single-petal" transform="rotate(135, 200, 150)"/>
-          <use href="#single-petal" transform="rotate(180, 200, 150)"/>
-          <use href="#single-petal" transform="rotate(225, 200, 150)"/>
-          <use href="#single-petal" transform="rotate(270, 200, 150)"/>
-          <use href="#single-petal" transform="rotate(315, 200, 150)"/>
+          <g transform="translate(140, 170) scale(0.75)">
+            <use href="#flower"/>
+          </g>
+          <g transform="translate(260, 170) scale(0.75)">
+            <use href="#flower"/>
+          </g>
+          <g transform="translate(200, 110) scale(0.85)">
+            <use href="#flower"/>
+          </g>
 
-          <circle cx="200" cy="150" r="25" fill="var(--glow-light)" filter="drop-shadow(0 0 15px var(--neon-yellow))"/>
+          <g transform="translate(155, 220) scale(0.9)">
+            <use href="#flower"/>
+          </g>
+          <g transform="translate(245, 220) scale(0.9)">
+            <use href="#flower"/>
+          </g>
+          <g transform="translate(200, 180) scale(1.1)">
+            <use href="#flower"/>
+          </g>
+
+          <g transform="translate(200, 300)">
+            <path d="M -5,5 Q -25,40 -35,80 Q -20,75 -5,60 Z" fill="url(#ribbon-grad)"/>
+            <path d="M 5,5 Q 25,40 35,80 Q 20,75 5,60 Z" fill="url(#ribbon-grad)"/>
+            <path d="M 0,0 C -30,-20 -50,0 0,10 Z" fill="url(#ribbon-grad)"/>
+            <path d="M 0,0 C 30,-20 50,0 0,10 Z" fill="url(#ribbon-grad)"/>
+            <circle cx="0" cy="2" r="7" fill="#d63031"/>
+          </g>
+
         </g>
       </svg>
 
       <div class="shadow"></div>
-      <div class="neon-text">Toca la flor</div>
     </div>
 
-    <!-- Contador de toques -->
     <div class="counter-badge">
       <span class="heart-icon" id="heartIcon">♥</span>
-      <span id="clickCounter">0</span> Toques
+      <span id="clickCounter">0</span> te amo
     </div>
   </div>
 
-  <!-- Mensaje Especial al Pie -->
-  <div class="footer-love-text">Te amo HANNI :3</div>
+  <div class="footer-love-text">Te amo <span class="highlight-name">HANNI</span> :3</div>
 
   <script>
     const welcomeOverlay = document.getElementById('welcomeOverlay');
@@ -361,35 +455,76 @@
     const container = document.getElementById('flowerContainer');
     const counterDisplay = document.getElementById('clickCounter');
     const heartIcon = document.getElementById('heartIcon');
-    const colores = ['#ffff00', '#00ffff', '#ff007f', '#39ff14'];
-    let indiceColor = 0;
-    let count = 0;
+    const bgMusic = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    const musicIcon = document.getElementById('musicIcon');
+    const musicText = document.getElementById('musicText');
 
-    // Cerrar bienvenida
+    bgMusic.volume = 0.6;
+    let isPlaying = false;
+
+    // Función segura para iniciar audio con permiso del usuario
+    function playAudio() {
+      bgMusic.play().then(() => {
+        musicIcon.textContent = '🎵';
+        musicText.textContent = 'Sonando';
+        isPlaying = true;
+      }).catch(err => {
+        console.warn("Reproducción diferida por política del navegador:", err);
+        musicIcon.textContent = '🔇';
+        musicText.textContent = 'Toca aquí';
+        isPlaying = false;
+      });
+    }
+
+    function toggleMusic() {
+      if (isPlaying) {
+        bgMusic.pause();
+        musicIcon.textContent = '🔇';
+        musicText.textContent = 'Pausa';
+        isPlaying = false;
+      } else {
+        playAudio();
+      }
+    }
+
+    musicToggle.addEventListener('click', toggleMusic);
+
     startBtn.addEventListener('click', () => {
       welcomeOverlay.classList.add('hidden');
+      playAudio();
     });
 
-    // Interacción con la flor
+    // Intentar reproducir si toca cualquier parte de la pantalla si no había sonado
+    document.body.addEventListener('click', () => {
+      if (!isPlaying && welcomeOverlay.classList.contains('hidden')) {
+        playAudio();
+      }
+    }, { once: true });
+
+    let count = 0;
+    const heartColors = ['#e74c3c', '#e84393', '#fd79a8', '#ff7675', '#fdcb6e', '#00b894', '#0984e3', '#6c5ce7', '#a29bfe', '#ff9ff3', '#f1c40f'];
+
     container.addEventListener('pointerdown', (e) => {
       count++;
       counterDisplay.textContent = count;
+      
+      const randomColor = heartColors[Math.floor(Math.random() * heartColors.length)];
+      heartIcon.style.color = randomColor;
+      
       heartIcon.style.transform = 'scale(1.4)';
       setTimeout(() => heartIcon.style.transform = 'scale(1)', 200);
-
-      indiceColor = (indiceColor + 1) % colores.length;
-      document.documentElement.style.setProperty('--neon-yellow', colores[indiceColor]);
 
       const rect = container.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const clickY = e.clientY - rect.top;
 
-      for (let i = 0; i < 16; i++) {
+      for (let i = 0; i < 14; i++) {
         const particle = document.createElement('div');
         particle.classList.add('particle');
 
         const angle = Math.random() * Math.PI * 2;
-        const distance = 30 + Math.random() * 50;
+        const distance = 40 + Math.random() * 60;
         const dx = Math.cos(angle) * distance + 'px';
         const dy = Math.sin(angle) * distance + 'px';
 
@@ -400,11 +535,11 @@
 
         container.appendChild(particle);
 
-        setTimeout(() => particle.remove(), 800);
+        setTimeout(() => particle.remove(), 1200);
       }
     });
 
-    /* --- EFECTO GALAXIA Y ESTRELLAS FUGACES --- */
+    /* EFECTO GALAXIA */
     const canvas = document.getElementById('galaxyCanvas');
     const ctx = canvas.getContext('2d');
 
@@ -415,10 +550,8 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    // Crear estrellas fijas
     const stars = [];
-    const numStars = 150;
-    for (let i = 0; i < numStars; i++) {
+    for (let i = 0; i < 140; i++) {
       stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -428,63 +561,57 @@
       });
     }
 
-    // Crear estrellas fugaces
     const shootingStars = [];
-
     function addShootingStar() {
       shootingStars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * (canvas.height / 2),
         length: 80 + Math.random() * 60,
-        speed: 8 + Math.random() * 6,
+        speed: 7 + Math.random() * 5,
         dx: 4 + Math.random() * 2,
         dy: 4 + Math.random() * 2,
         alpha: 1
       });
     }
 
-    // Generar estrellas fugaces periódicamente
-    setInterval(addShootingStar, 2500);
+    setInterval(addShootingStar, 2800);
 
     function animateGalaxy() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Dibujar nebulosa sutil de galaxia
       const bgGradient = ctx.createRadialGradient(
         canvas.width / 2, canvas.height / 2, 50,
         canvas.width / 2, canvas.height / 2, Math.max(canvas.width, canvas.height)
       );
-      bgGradient.addColorStop(0, 'rgba(25, 10, 45, 0.4)');
-      bgGradient.addColorStop(0.5, 'rgba(10, 5, 25, 0.2)');
-      bgGradient.addColorStop(1, 'rgba(3, 3, 8, 0)');
+      bgGradient.addColorStop(0, 'rgba(25, 20, 10, 0.4)');
+      bgGradient.addColorStop(0.5, 'rgba(15, 12, 8, 0.2)');
+      bgGradient.addColorStop(1, 'rgba(11, 12, 16, 0)');
       ctx.fillStyle = bgGradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Dibujar estrellas titilantes
       stars.forEach(star => {
         star.alpha += star.speed;
         if (star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
 
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(star.alpha)})`;
+        ctx.fillStyle = `rgba(255, 248, 220, ${Math.abs(star.alpha)})`;
         ctx.fill();
       });
 
-      // Dibujar estrellas fugaces
       for (let i = shootingStars.length - 1; i >= 0; i--) {
         const s = shootingStars[i];
         
         const grad = ctx.createLinearGradient(s.x, s.y, s.x - s.length, s.y - s.length);
         grad.addColorStop(0, `rgba(255, 255, 255, ${s.alpha})`);
-        grad.addColorStop(0.3, `rgba(255, 255, 0, ${s.alpha * 0.8})`);
+        grad.addColorStop(0.3, `rgba(241, 196, 15, ${s.alpha * 0.7})`);
         grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
         ctx.beginPath();
         ctx.moveTo(s.x, s.y);
         ctx.lineTo(s.x - s.length, s.y - s.length);
         ctx.strokeStyle = grad;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 1.8;
         ctx.stroke();
 
         s.x += s.dx;
